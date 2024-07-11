@@ -115,14 +115,86 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        # Initialize an empty dictionary to store key-value pairs for object
+        # attributes
+        kwargs = {}
+
+        # Flag to track invalid parameters
+        invalid = False
+
+        # Initialize variables for parsing parameters.
+        param = key_name = value = ''
+
+        # Split args to retrieve class name.
+        args_part = args.partition(' ')
+        args = args_part[0]
+        remaining_args = args_part[2]
+
+        # Check if class name is provided
         if not args:
             print("** class name missing **")
             return
+        # Check if class name is valid.
         elif args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+
+        # Loop through the remaining parameters and create a dictionary.
+        while (remaining_args):
+            # Reset invalid flag for each parameter.
+            invalid = False
+
+            # Split the args to get the next parameter
+            arg_parts = args.partition(' ')
+            param = arg_parts[0]
+            remaining_args = arg_parts[2]
+
+            # Check if the parameter contains an '='.
+            if '=' in param:
+                # Split the parameter into key and value.
+                param = param.partition('=')
+                key_name = param[0]
+                value = param[2]
+
+                # Check if the value is a string.
+                if value[0] == '\"' and value[-1] == '\"':
+                    # Replace underscores with spaces in the string value.
+                    if '_' in value:
+                        value = value.replace('_', ' ')
+                    value = eval(value)
+                # Check if the value is a float
+                elif '.' in value:
+                    try:
+                        value = float(value)
+                    except Exception:
+                        invalid = True
+
+                # Otherwise, treat the value as an integer.
+                else:
+                    try:
+                        value = int(value)
+                    except Exception:
+                        invalid = True
+            else:
+                invalid = True
+
+            # Update value to kwargs dict
+            if not invalid:
+                kwargs.update({key_name: value})
+
+
+        # Create a new instance of the specified class.
         new_instance = HBNBCommand.classes[args]()
-        storage.save()
+        if kwargs:
+            # Update the kwargs dictionary with the instance's dictionary.
+            kwargs.update(new_instance.to_dict())
+
+            # Create a new instance with the updated kwargs.
+            new_instance = HBNBCommand.classes[args](**kwargs)
+
+            # Add the new instance to storage.
+        storage.new(new_instance)
+        # Print the ID of the new instance.
         print(new_instance.id)
         storage.save()
 
