@@ -107,3 +107,33 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
+
+    def test_delete(self):
+        """Test delete method"""
+        new = BaseModel()
+        storage.new(new)
+        storage.save()
+        self.assertIn(new, storage.all().values())
+        storage.delete(new)
+        self.assertNotIn(new, storage.all().values())
+
+    def test_all_with_class(self):
+        """ Test all method with class filter """
+        new_state = State()
+        new_base = BaseModel()
+        storage.new(new_state)
+        storage.new(new_base)
+        storage.save()
+        self.assertIn(new_state, storage.all(State).values())
+        self.assertNotIn(new_base, storage.all(State).values())
+
+    def test_all_with_invalid_class(self):
+        """ Test all method with invalid class filter """
+        class InvalidClass:
+            pass
+
+        self.assertEqual(storage.all(InvalidClass), {})
+
+
+if __name__ == "__main__":
+    unittest.main()
