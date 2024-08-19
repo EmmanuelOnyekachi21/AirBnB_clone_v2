@@ -20,6 +20,10 @@ Return:
 
 from flask import Flask
 from markupsafe import escape
+# escape ensure that any user-provided data is safely handled by
+# escaping characters
+# that could be interpreted as HTML or JavaScript.
+
 
 app = Flask(__name__)
 
@@ -48,9 +52,6 @@ def c(text):
             new_text += ' '
         else:
             new_text += char
-    # ensure that any user-provided data is safely handled by
-    # escaping characters
-    # that could be interpreted as HTML or JavaScript.
     return f'C {escape(new_text)}'
 
 
