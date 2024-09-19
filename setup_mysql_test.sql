@@ -1,14 +1,14 @@
--- Create the database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS hbnb_test_db;
+-- Create the database if it does not exist
+CREATE DATABASE IF NOT EXISTS `{{DB_NAME}}`;
 
--- Create the user if it doesn't exist and set the password
-CREATE USER IF NOT EXISTS 'hbnb_test'@'localhost' IDENTIFIED BY 'hbnb_test_pwd';
+-- Create the user with a specified password if it does not exist
+CREATE USER IF NOT EXISTS '{{DB_USER}}'@'localhost' IDENTIFIED BY '{{DB_PASSWORD}}';
 
--- Grant all privileges on the database hbnb_test_db to the user
-GRANT ALL PRIVILEGES ON hbnb_test_db.* TO 'hbnb_test'@'localhost';
+-- Grant all privileges on the database to the user
+GRANT ALL PRIVILEGES ON `{{DB_NAME}}`.* TO '{{DB_USER}}'@'localhost';
 
--- Grant SELECT privilege on the database performance_schema to the user
-GRANT SELECT ON performance_schema.* TO 'hbnb_test'@'localhost';
+-- Grant SELECT privilege on the performance_schema database to the user
+GRANT SELECT ON performance_schema.* TO '{{DB_USER}}'@'localhost';
 
--- Flush privileges to ensure that all changes take effect
+-- Apply the changes
 FLUSH PRIVILEGES;
