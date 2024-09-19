@@ -145,9 +145,9 @@ class HBNBCommand(cmd.Cmd):
             invalid = False
 
             # Split the args to get the next parameter
-            arg_parts = args.partition(' ')
-            param = arg_parts[0]
-            remaining_args = arg_parts[2]
+            params_part = remaining_args.partition(' ')
+            param = params_part[0]
+            remaining_args = params_part[2]
 
             # Check if the parameter contains an '='.
             if '=' in param:
@@ -157,11 +157,13 @@ class HBNBCommand(cmd.Cmd):
                 value = param[2]
 
                 # Check if the value is a string.
-                if value[0] == '\"' and value[-1] == '\"':
-                    # Replace underscores with spaces in the string value.
-                    if '_' in value:
-                        value = value.replace('_', ' ')
-                    value = eval(value)
+                # if value[0] == '\"' and value[-1] == '\"':
+                #     # Replace underscores with spaces in the string value.
+                #     if '_' in value:
+                #         value = value.replace('_', ' ')
+                #     value = eval(value)
+                if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1].replace('\"', '"').replace('_', ' ')
                 # Check if the value is a float
                 elif '.' in value:
                     try:
