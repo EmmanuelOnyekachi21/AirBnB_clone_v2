@@ -4,7 +4,6 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models import storage
-from models.city import City
 
 
 class State(BaseModel):
@@ -19,6 +18,7 @@ class State(BaseModel):
     def cities(self):
         """Property decorator for cities attribute
         """
+        from models.city import City
         # Get all cities from storage
         all_cities = storage.all(City)
         # Initialize a list to store the cities for the state
